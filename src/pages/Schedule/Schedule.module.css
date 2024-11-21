@@ -1,0 +1,10 @@
+Header{
+    color: #fdc52c;
+}
+.matches{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    gap: 30px;
+}

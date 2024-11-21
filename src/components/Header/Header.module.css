@@ -1,0 +1,33 @@
+header{
+    display: flex;
+    flex-direction: column;
+    background: #0a0927;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+header nav{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+header nav ul{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style-type: none;
+    width: 100%;
+}
+header nav ul li a{
+    text-decoration: none;
+    color: #fdc52c;
+    font-size: 20px;
+    line-height: 30px;
+    font-family: 'Roboto', Helvetica Neue, Helvetica, sans-serif;
+}
+.topBar {
+    padding: 8px 0;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}

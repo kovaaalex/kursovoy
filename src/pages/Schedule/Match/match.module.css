@@ -1,0 +1,8 @@
+.game{
+    display: flex;
+    justify-content: space-between;
+    width: 1000px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px #D9D9D9, -5px -5px 5px #D9D9D9;
+    padding: 20px;
+}
