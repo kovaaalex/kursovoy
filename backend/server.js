@@ -161,11 +161,12 @@ app.put('/api/newpassword', async(req, res) => {
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'User not found' })
         }
-        const userId = userResult.rows[0].id
-        const insertQuery = `INSERT INTO person2 (id, password) VALUES ($1, $2) ON CONFLICT (id) DO UPDATE SET password = $2`
-        const insertValues = [userId, hashedPassword]
-        await fetchPersons(insertQuery, insertValues)
-        return res.status(200).json({ message: 'Password updated successfully' })
+        const userId = result.rows[0].id
+        console.log(userId)
+        const updateQuery = `UPDATE person2 SET password = $1 WHERE id = $2`
+        const updateValues = [password, userId]
+        await fetchPersons(updateQuery, updateValues)
+        return res.status(200).json({ message: 'Password updated successfully', user: result.rows[0] })
     } catch (error) {
         console.error('Error updating password:', error)
         return res.status(500).json({ message: 'Internal server error' })
@@ -202,6 +203,9 @@ ORDER BY date `
         console.error('Ошибка при получении данных', error.message)
         res.status(500).json({message: 'Ошибка сервера', error: error.message})
     }
+})
+app.get('/api/squad', async(req, res) => {
+    
 })
 app.listen(5000, () => {
     console.log('Server is running on http://localhost:5000')

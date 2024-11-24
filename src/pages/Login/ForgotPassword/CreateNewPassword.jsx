@@ -25,6 +25,7 @@ export default function CreateNewPassword({email}) {
                 body: JSON.stringify({ email, password })
             })
             const data = await response.json()
+            alert(data.user)
             if (response.ok) {
                 alert(data.message)
                 navigate('/account', { state: { user: data.user } })
