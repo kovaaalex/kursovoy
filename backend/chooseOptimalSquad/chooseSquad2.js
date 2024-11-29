@@ -1,28 +1,30 @@
 const { fetchPersons } = require('../dbaccess');
 const { findMaxRatingsByPosition } = require('./graph');
-const { findMaxRatingsByPositionW } = require('./graphWingers');
 
 async function fetchPlayers() {
     try {
         const result = await fetchPersons('SELECT * FROM players LEFT JOIN player_stats ON players.player_id = player_stats.player_id INNER JOIN person ON person.id = players.person_id');
-        return result.rows
+        return result.rows;
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
 }
 
 async function filterNotInjuredPlayers() {
-    const players = await fetchPlayers()
-    return players.filter(player => player.is_injured === false)
+    const players = await fetchPlayers();
+    return players.filter(player => player.is_injured === false);
 }
+
 function chooseBestGoalkeeper(goalkeepers) {
     goalkeepers.sort((a, b) => calculateGoalkeeperRating(b) - calculateGoalkeeperRating(a));
     return goalkeepers[0];
 }
+
 function chooseBestForward(forwards) {
     forwards.sort((a, b) => calculateForwardRating(b) - calculateForwardRating(a));
     return forwards[0];
 }
+
 function calculateGoalkeeperRating(goalkeeper) {
     let rating = 0;
     rating += goalkeeper.count__matches * 10;
@@ -37,6 +39,7 @@ function calculateGoalkeeperRating(goalkeeper) {
     rating += (12 - monthsDifference) * 5;
     return rating;
 }
+
 function calculateCenterBackRating(player) {
     let rating = 0
     rating += player.count__matches * 0.5
@@ -48,9 +51,9 @@ function calculateCenterBackRating(player) {
     rating += player.interceptions * 3
     rating += player.blocked_shots * 2
     return rating
-}
-
-function calculateFullBackRating(player) {
+    }
+    
+    function calculateFullBackRating(player) {
     let rating = 0
     rating += player.count__matches * 0.5
     const age = new Date().getFullYear() - new Date(player.birth_date).getFullYear()
@@ -64,9 +67,9 @@ function calculateFullBackRating(player) {
     rating += player.pace
     rating += player.assists
     return rating
-}
-
-function calculateMidfielderRating(player) {
+    }
+    
+    function calculateMidfielderRating(player) {
     let rating = 0;
     rating += player.count__matches * 0.5;
     const age = new Date().getFullYear() - new Date(player.birth_date).getFullYear();
@@ -76,9 +79,9 @@ function calculateMidfielderRating(player) {
     rating += player.creativity * 1.5;
     rating += player.teamwork * 1.5;
     return rating;
-}
-
-function calculateWingerRating(player) {
+    }
+    
+    function calculateWingerRating(player) {
     let rating = 0;
     rating += player.count__matches * 0.5;
     const age = new Date().getFullYear() - new Date(player.birth_date).getFullYear();
@@ -91,9 +94,9 @@ function calculateWingerRating(player) {
     rating += player.goals_scored * 0.2; // Учитываем голы
     rating += player.assists * 0.3; // Учитываем передачи
     return rating;
-}
-
-function calculateForwardRating(player) {
+    }
+    
+    function calculateForwardRating(player) {
     let rating = 0;
     rating += player.count__matches * 0.5;
     const age = new Date().getFullYear() - new Date(player.birth_date).getFullYear();
@@ -104,18 +107,19 @@ function calculateForwardRating(player) {
     rating += player.shot_accuracy * 2;
     rating += player.goals_scored * 0.3; // Учитываем голы
     return rating;
-}
-(async function() {
+    }
+
+async function createStartingSquad() {
     let startSquad = {
-        goalkeeper: null,
-        leftback: null,
-        centrebacks: [],
-        rightback: null,
-        defenseMidfielders: [],
-        attackingMidfielders: null,
-        leftWinger: null,
-        rightWinger: null,
-        striker: null
+        "Goalkeeper": null,
+        "Leftback": null,
+        "Centreback": [],
+        "Rightback": null,
+        "Central Defensive Midfielder": [],
+        "Central Attacking Midfielder": null,
+        "Left Winger": null,
+        "Right Winger": null,
+        "Centreforward": null
     };
 
     let readyPlayers = await filterNotInjuredPlayers();
@@ -123,36 +127,29 @@ function calculateForwardRating(player) {
     const playerRatings = readyPlayers.map(player => {
         const ratings = [];
         
-        // Расчет рейтинга для каждой detailed_position
         for (const position of player.detailed_positions) {
             let rating = 0;
 
-            switch(position){
-                case 'Centreback': {
+            switch(position) {
+                case 'Centreback':
                     rating = calculateCenterBackRating(player);
                     break;
-                }
-                case 'Leftback': case 'Rightback': {
+                case 'Leftback': case 'Rightback':
                     rating = calculateFullBackRating(player);
                     break;
-                }
-                case "Central Attacking Midfielder": case "Central Defensive Midfielder": case "Central Midfielder": {
+                case "Central Attacking Midfielder": case "Central Defensive Midfielder": case "Central Midfielder":
                     rating = calculateMidfielderRating(player);
                     break;
-                }
-                case "Left Midfielder": case "Right Midfielder": {
+                case "Left Midfielder": case "Right Midfielder":
                     rating = calculateMidfielderRating(player) * 0.9;
                     break;
-                }
                 case "Left Winger":
-                case "Right Winger": {
+                case "Right Winger":
                     rating = calculateWingerRating(player);
                     break;
-                }
-                case "Centreforward": {
+                case "Centreforward":
                     rating = calculateForwardRating(player);
                     break;
-                }
                 default:
             }
 
@@ -169,9 +166,8 @@ function calculateForwardRating(player) {
 
     const goalkeepers = readyPlayers.filter(player => player.position === "Goalkeeper");
     const startGoalkeeper = chooseBestGoalkeeper(goalkeepers);
-    console.log("Chosen Goalkeeper:", startGoalkeeper);
     readyPlayers = readyPlayers.filter(player => player.person_id !== startGoalkeeper.person_id);
-    startSquad.goalkeeper = startGoalkeeper.person_id;
+    startSquad["Goalkeeper"] = startGoalkeeper.person_id;
 
     const defenders = playerRatings.filter(player => 
         player.detailed_positions.some(position => 
@@ -201,22 +197,20 @@ function calculateForwardRating(player) {
     }
 
     const defense = findMaxRatingsByPosition(ratings2);
-    startSquad.leftback = +defense.Leftback.player;
-    startSquad.rightback = +defense.Rightback.player;
-    startSquad.centrebacks.push(+defense.Centreback1.player, +defense.Centreback2.player);
+    startSquad["Leftback"] = +defense.Leftback.player;
+    startSquad["Rightback"] = +defense.Rightback.player;
+    startSquad["Centreback"].push(+defense.Centreback1.player, +defense.Centreback2.player);
 
     let playersToRemove = new Set(Object.values(defense).map(el => el.player));
     playersToRemove = new Set(Array.from(playersToRemove).map(el => +el));
 
     readyPlayers = readyPlayers.filter(player => !playersToRemove.has(player.player_id));
 
-    // Выбор стартового нападающего
     const strikers = readyPlayers.filter(player => player.detailed_positions.includes("Centreforward"));
     const startStriker = chooseBestForward(strikers);
-    startSquad.striker = startStriker.person_id;
+    startSquad["Centreforward"] = startStriker.person_id;
     readyPlayers = readyPlayers.filter(player => player.player_id !== startStriker.person_id);
 
-    
     const wingers = playerRatings.filter(player => 
         player.detailed_positions.some(position => 
           ['Left Winger', 'Right Winger'].includes(position)
@@ -228,10 +222,10 @@ function calculateForwardRating(player) {
                 ratings[winger.player_id] = {};
             }
             ratings[winger.player_id][position] = winger.ratings[index];
-        })
-    })
-    let ratings3 = {};
+        });
+    });
 
+    let ratings3 = {};
     for (let playerId in ratings) {
         ratings3[playerId] = {
             'Left Winger': ratings[playerId]['Left Winger'] || 0,
@@ -239,14 +233,13 @@ function calculateForwardRating(player) {
         };
     }
     const wingersss = findMaxRatingsByPosition(ratings3, ['Left Winger', 'Right Winger']);
-    startSquad.leftWinger = +wingersss['Left Winger'].player
-    startSquad.rightWinger = +wingersss['Right Winger'].player
+    startSquad["Left Winger"] = +wingersss['Left Winger'].player;
+    startSquad["Right Winger"] = +wingersss['Right Winger'].player;
+
     let wingersToRemove = new Set(Object.values(wingersss).map(el => el.player));
     wingersToRemove = new Set(Array.from(wingersToRemove).map(el => +el));
-
     readyPlayers = readyPlayers.filter(player => !wingersToRemove.has(player.player_id));
-    // Выводим стартовый состав
-    console.log("Start Squad:", startSquad);
+
     const midfielders = playerRatings.filter(player => 
         player.detailed_positions.some(position => 
           ['Central Attacking Midfielder', 'Central Defensive Midfielder'].includes(position)
@@ -258,10 +251,10 @@ function calculateForwardRating(player) {
                 ratings[mid.player_id] = {};
             }
             ratings[mid.player_id][position] = mid.ratings[index];
-        })
-    })
+        });
+    });
+
     let ratings4 = {};
-    
     for (let playerId in ratings) {
         ratings4[playerId] = {
             'Central Attacking Midfielder': ratings[playerId]['Central Attacking Midfielder'] || 0,
@@ -270,11 +263,14 @@ function calculateForwardRating(player) {
         };
     }
     const cm = findMaxRatingsByPosition(ratings4, ['Central Attacking Midfielder', 'Central Defensive Midfielder1', 'Central Defensive Midfielder2']);
-    console.log(cm)
+
+    startSquad["Central Attacking Midfielder"] = +cm["Central Attacking Midfielder"].player;
+    startSquad["Central Defensive Midfielder"].push(+cm['Central Defensive Midfielder1'].player, +cm['Central Defensive Midfielder2'].player);
     
-    startSquad.attackingMidfielders = +cm["Central Attacking Midfielder"].player;
-    startSquad.defenseMidfielders.push(+cm['Central Defensive Midfielder1'].player, +cm['Central Defensive Midfielder2'].player);
     let midToRemove = new Set(Object.values(cm).map(el => el.player));
     midToRemove = new Set(Array.from(midToRemove).map(el => +el));
-    console.log(startSquad)
-})();
+    
+    console.log(startSquad);
+    return startSquad;
+}
+module.exports = {createStartingSquad};

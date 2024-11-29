@@ -28,6 +28,9 @@ export default function CreateNewPassword({email}) {
             alert(data.user)
             if (response.ok) {
                 alert(data.message)
+                localStorage.setItem('user', JSON.stringify(data.user))
+                alert(localStorage.getItem('user')[0])
+                localStorage.setItem('token', data.token)
                 navigate('/account', { state: { user: data.user } })
             } else {
                 alert('Invalid credentials')

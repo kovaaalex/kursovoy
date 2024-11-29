@@ -1,0 +1,22 @@
+.aside {
+    height: 200px;
+    background-color: #f4f4f4; /* Цвет фона */
+    padding: 20px 0; /* Внутренние отступы */
+    border-right: 1px solid #e0e0e0; /* Разделительная линия справа */
+  }
+  
+  .aside ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Обнуляем отступы списка */
+    margin: 0; /* Обнуляем отступы списка */
+  }
+  
+  .aside li {
+    padding: 10px 20px; /* Вертикальные отступы пунктов */
+    cursor: pointer; /* Меняем курсор при наведении */
+    transition: background-color 0.3s ease; /* Анимация при наведении */
+  }
+  
+  .aside li:hover {
+    background-color: #e0e0e0; /* Цвет фона при наведении */
+  }

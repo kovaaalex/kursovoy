@@ -8,6 +8,7 @@ import Login from './pages/Login/Index';
 import Account from './pages/Account/Account';
 import Registration from './pages/Login/Registration/Index';
 import ForgotPassword from './pages/Login/ForgotPassword/Index';
+import ProtectedRoute from './components/ProtectedRoute/Index';
 function App() {
   return (
     <Router>
@@ -19,7 +20,14 @@ function App() {
             <Route path='/about' element={<About />}></Route>
             <Route path='/login' element={<Login />}></Route>
             <Route path='/register' element={<Registration />}></Route>
-            <Route path='/account' element={<Account />}></Route>
+            <Route 
+              path='/account' 
+              element={
+                <ProtectedRoute>
+                  <Account />
+                </ProtectedRoute>
+              } 
+            />
             <Route path='/forgot' element={<ForgotPassword />}></Route>
           </Routes>
         </main>
