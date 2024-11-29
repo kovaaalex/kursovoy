@@ -65,7 +65,6 @@ function findMaxRatingsByPosition(ratings, positions = ['Leftback', 'Centreback1
                 return acc;
             }, {});
 
-        console.log("Filtered Players:", filteredPlayers);
 
         // Создаем объект с позициями, где игроки из filteredPlayers лучшие
         let bestPositionsForFilteredPlayers = {};
@@ -89,7 +88,6 @@ function findMaxRatingsByPosition(ratings, positions = ['Leftback', 'Centreback1
 
         // Мы хотим заменить лучшего игрока на втором лучшего для минимальной разницы
         Object.entries(bestPositionsForFilteredPlayers).forEach(([player, ppositions]) => {
-            console.log(`Игрок ${player} лучший на позициях: ${ppositions.join(', ')}`);
 
             ppositions.forEach(position => {
                 let secondBestPlayer = null;
@@ -121,7 +119,6 @@ function findMaxRatingsByPosition(ratings, positions = ['Leftback', 'Centreback1
 
         // Заменим лучшего игрока на второго лучшего для позиции с минимальной разницей
         if (positionWithMinDiff) {
-            console.log(`Заменяем лучшего игрока на позиции ${positionWithMinDiff} на второго лучшего: ${secondBestPlayerAtMinDiff}`);
             
             const oldPlayer = maxRatings[positionWithMinDiff].player;
             if (oldPlayer) {

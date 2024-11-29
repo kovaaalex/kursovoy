@@ -1,17 +1,26 @@
 import { useState, useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, Navigate} from 'react-router-dom'
 import styles from './login.module.css'
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [users, setUsers] = useState([])
-
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        const savedUser = localStorage.getItem('user');
+        const user = savedUser ? JSON.parse(savedUser) : null
+        if(token) {
+            navigate('/account', { state: { user } })
+        }
+    }, [navigate])
     const handleSubmit = async (e) => {
         e.preventDefault()
+        
         try {
             const response = await fetch('http://localhost:5000/api/login', {
                 method: 'POST',
@@ -22,7 +31,11 @@ function Login() {
             })
             const data = await response.json()
             if (response.ok) {
-                alert(data.message)
+                alert(data.token)
+                localStorage.setItem('user', JSON.stringify(data.user))
+                alert(localStorage.getItem('user')[0])
+                setUsers(data.user)
+                localStorage.setItem('token', data.token)
                 navigate('/account', { state: { user: data.user } })
             } else {
                 alert('Invalid credentials')

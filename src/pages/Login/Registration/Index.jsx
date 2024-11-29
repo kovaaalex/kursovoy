@@ -29,7 +29,7 @@ export default function Registration() {
             })
             const data = await response.json()
             if (response.ok) {
-                alert(data.message)
+                alert(data.user)
                 navigate('/account', { state: { user: data.user } })
             } else {
                 alert('Invalid credentials')
