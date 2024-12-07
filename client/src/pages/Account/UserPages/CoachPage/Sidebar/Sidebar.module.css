@@ -1,0 +1,20 @@
+.aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрируем элементы по горизонтали */
+  justify-content: center; /* Центрируем элементы по вертикали */
+  height: 100%; /* Задать высоту, чтобы центрирование работало */
+} 
+ .aside ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Обнуляем отступы списка */
+    margin: 0; /* Обнуляем отступы списка */
+  }
+  
+  .aside li {
+    color: #fdc52c;
+    border-right: 1px solid #fdc52c;
+    padding: 10px 20px; /* Вертикальные отступы пунктов */
+    cursor: pointer; /* Меняем курсор при наведении */
+    transition: background-color 0.3s ease; /* Анимация при наведении */
+  }

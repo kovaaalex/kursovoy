@@ -1,0 +1,6 @@
+.adminmain{
+    display: flex;
+    background: linear-gradient(247deg, #154284, #181733);
+    font-family: Arial, sans-serif;
+    height: 100vh;
+}

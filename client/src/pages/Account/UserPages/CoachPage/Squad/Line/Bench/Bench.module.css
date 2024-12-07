@@ -1,0 +1,29 @@
+/* Bench.module.css */
+.bench {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 10px;
+    display: flex;
+}
+.bench h3{
+    color: #fdc52c;
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+.player {
+    font-size: 13px;
+    color: #D9D9D9;
+    padding: 10px 0;
+}
+.section {
+    display: flex;
+    flex-direction: column;
+}
+.player:hover {
+    background-color: #fdc52c; 
+    color: #0a0927; 
+    cursor: pointer;
+}

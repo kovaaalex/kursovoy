@@ -1,0 +1,39 @@
+.player{
+    display: flex;
+    align-items: center;
+}
+.player p{
+    width: 180px;
+}
+.radioGroup {
+    display: flex;
+    align-items: center;
+}
+
+.radioInput {
+    display: none; /* Скрываем стандартные радиокнопки */
+}
+
+.radioLabel {
+    margin-right: 20px;
+    cursor: pointer;
+    position: relative;
+    padding-left: 25px; /* Отступ для кастомного радиобатона */
+}
+
+.radioLabel::before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid #eaeaea;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.radioInput:checked + .radioLabel::before {
+    background: #00adb5;
+    border-color: #00adb5;
+}

@@ -1,0 +1,76 @@
+.setStatsContainer {
+    color: #fdc52c;
+}
+.setStatsContainer input[type="number"] {
+    width: 50px;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.setStatsContainer h2, .setStatsContainer h3{
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+}
+.setStatsContainer h3{
+    font-size: 20px;
+}
+.setStatsContainer .character {
+    width: 200px;
+    padding: 5px 0;
+}
+.setStatsContainer .character:hover{
+    background-color: #ccc;
+    cursor: pointer;
+}
+.submitStats{
+    margin-top: 10px;
+    color: #fdc52c;
+    background: none;
+    padding: 10px 15px;
+    border: 1px solid #fdc52c;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.checkbox-input {
+    display: none; /* Скрываем оригинальный чекбокс */
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007BFF;
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+    background-color: #007BFF;
+    border-color: #0056b3;
+}
+
+.checkbox-input:checked + .checkbox-custom:after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 8px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}

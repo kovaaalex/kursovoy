@@ -1,0 +1,85 @@
+.deleteEmployee{
+    padding: 20px;
+    color: #fdc52c;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+.deleteEmployee h2 {
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+}
+.deleteEmployee button{
+    width: 200px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: none;
+    border: 2px solid #fdc52c;
+    color: #fdc52c;
+    text-transform: uppercase;
+    font-style: italic;
+    cursor: pointer;
+}
+/* DeleteEmployee.module.css */
+
+.roleDropdown {
+    padding: 10px;
+    border: 1px solid #fdc52c;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.roleOptions {
+    border: 1px solid #ccc;
+    padding: 5px;
+    position: absolute;
+    z-index: 1000; /* Ensure dropdown appears above other elements */
+}
+
+
+
+.successMessage {
+    color: green;
+}
+
+.errorMessage {
+    color: red;
+}
+.roleContainer{
+    display: flex;
+    gap: 15px
+}
+.deleteEmployee .roleOption{
+    padding: 10px 15px;
+    border: 1px solid #fdc52c;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.deleteEmployee .roleOption:hover {
+    background-color: #f0f0f0; /* Change background on hover */
+}
+.deleteEmployee label{
+    margin-bottom: 10px;
+}
+.characters{
+    display: flex;
+    flex-direction: column;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.character{
+    padding: 5px 0;
+}
+.character:hover{
+    background-color: #ccc;
+    cursor: pointer;
+}
+.selected{
+    background-color: #f0f0f0;
+}
