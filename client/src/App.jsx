@@ -3,7 +3,7 @@ import './App.css';
 import Home from './pages/Home/Index';
 import Schedule from './pages/Schedule/Index';
 import Login from './pages/Login/Index';
-import Account from './pages/Account/Account';
+import Account from './pages/Account/Index';
 import Registration from './pages/Login/Registration/Index';
 import ForgotPassword from './pages/Login/ForgotPassword/Index';
 import ProtectedRoute from './components/ProtectedRoute/Index';

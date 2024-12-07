@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import CoachPage from "./UserPages/CoachPage/CoachPage";
+import CoachPage from "./UserPages/CoachPage/Index";
 import styles from './Account.module.css'
 import MedicPage from "./UserPages/MedicPage/Index";
 import AdminPage from "./UserPages/AdminPage/Index";
