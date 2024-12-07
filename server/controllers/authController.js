@@ -9,8 +9,8 @@ const { generateCode } = require('../model/generators/generateMailCode')
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'kovalenko.alex04@gmail.com',
-        pass: 'rksf osyy klrh ergj'
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
     }
 });
 
@@ -70,7 +70,7 @@ exports.forgotPassword = async (req, res) => {
     const code = generateCode();
     const mailOptions = {
         from: 'kovaaalex@gmail.com',
-        to: email,
+        to: process.env.SMTP_USERs,
         subject: 'Forgot Password',
         text: `Ваш 6-значный код: ${code}`
     };
