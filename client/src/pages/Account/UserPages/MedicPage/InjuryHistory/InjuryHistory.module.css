@@ -1,0 +1,17 @@
+.selectInjuries{ 
+    padding: 20px;
+}
+.selectInjuries h2{
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+}
+.selectInjuries ul{
+    padding: 0 20px;
+}
+.selectInjuries ul li {
+    color: #fff;
+    line-height: 1.25;
+}

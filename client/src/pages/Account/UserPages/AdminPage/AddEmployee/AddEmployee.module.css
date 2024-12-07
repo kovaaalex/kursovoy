@@ -1,0 +1,74 @@
+.AddEmployee {
+    padding: 20px;
+    color: #fdc52c;
+}
+
+.AddEmployee h2 {
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+}
+
+
+.AddEmployee button{
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: none;
+    border: 2px solid #fdc52c;
+    color: #fdc52c;
+    text-transform: uppercase;
+    font-style: italic;
+    cursor: pointer;
+}
+.AddEmployee .inlineFields {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.AddEmployee .inlineFields div {
+    flex: 1;
+    margin-right: 10px; /* Adjust space between fields */
+}
+
+.AddEmployee .inlineFields div:last-child {
+    margin-right: 0; /* Remove margin for the last item */
+}
+.roleContainer {
+    display: flex;
+    gap: 10px; /* Space between options */
+    margin-top: 5px; /* Space above the options */
+}
+
+.roleOption {
+    padding: 10px 15px;
+    border: 1px solid #fdc52c;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.roleOption:hover {
+    background-color: #f0f0f0; /* Change background on hover */
+}
+
+.selected {
+    background-color: #fdc52c; /* Highlight selected option */
+    color: white;
+    border: 1px solid #fdc52c; /* Match border color with background */
+}
+.AddEmployee input[type="date"],
+.AddEmployee input[type="text"],
+.AddEmployee input[type="number"],
+.AddEmployee input[type="email"] {
+    width: 100px;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.AddEmployee label{
+    margin-top: 10px;
+}

@@ -1,0 +1,29 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.personInfo {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 0
+}
+.personHeaders{
+    display: flex;
+    flex-direction: column;
+    gap:5px
+}
+.personHeaders h1{
+    color: #fdc52c;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+.personHeaders h3, h5{
+    color: #D9D9D9;
+    font-weight: 400;
+    letter-spacing: 0.4px;
+    font-size: 16px;
+}
+.personHeaders h5{
+    font-size: 12px;
+}

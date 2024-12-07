@@ -1,0 +1,44 @@
+.coachpage {
+    display: flex;
+    background: linear-gradient(247deg, #154284, #181733);
+    font-family: Arial, sans-serif;
+    height: 100vh;
+}
+
+.accountmain {
+    flex: 1;
+    padding: 20px;
+    margin-left: 20px;
+    overflow-y: auto;
+}
+
+
+p {
+    font-size: 16px;
+    margin: 4px 0;
+}
+
+img {
+    display: block;
+    margin-top: 10px;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.sidebar-item {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}

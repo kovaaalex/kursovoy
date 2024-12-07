@@ -1,0 +1,19 @@
+.squadReports{
+    padding: 20px;
+}
+.squadReports h2{
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+}
+.squadReports ul li{
+    list-style-type: none;
+}
+.squadReports ul li button{
+    background: none;
+    border: none;
+    color: #fdc52c;
+    text-decoration: underline;
+    cursor: pointer;
+}

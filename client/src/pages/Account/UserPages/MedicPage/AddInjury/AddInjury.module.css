@@ -1,0 +1,67 @@
+.container{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container h2{
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+}
+
+
+.dropdown {
+    background-color: #eaeaea;
+    border-radius: 5px;
+    height: 200px; 
+    overflow-y: auto;
+    position: absolute; 
+    z-index: 10;
+    width: 300px;
+    margin: 0 10px;
+}
+
+.dropdownItem {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdownItem:hover {
+    background-color: #00adb5;
+}
+
+.dateFields {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.saveButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: none;
+    border: 2px solid #fdc52c;
+    color: #fdc52c;
+    text-transform: uppercase;
+    font-style: italic;
+    cursor: pointer;
+    width: 100px;
+}
+
+.saveButton:hover {
+    background-color: #008c8f;
+}
+
+.loading, .error {
+    text-align: center;
+    color: #eaeaea;
+}
+.container label{
+    display: block;
+    padding: 10px 0;
+    color: #fdc52c;
+}
