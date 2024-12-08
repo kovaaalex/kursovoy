@@ -34,7 +34,7 @@ function PlayerPage({user, photoUrl}) {
             <div className={styles.accountmain}>
                 <PersonInfo user={user} photoUrl={photoUrl}/>
                 {selectedTab === 'requestContract' && <ContractRequest />}
-                {selectedTab === 'playerInfo' && <PlayerInfo />}
+                {selectedTab === 'playerInfo' && <PlayerInfo user={user}/>}
             </div>
         </div>
     )

@@ -2,34 +2,7 @@ const { fetchPersons } = require('../model/dbaccess');
 
 exports.getPlayers = async (req, res) => {
     try {
-        const query = `
-            SELECT 
-                person.id,
-                person.first_name,
-                person.last_name,
-                players.position AS role,
-                person.picture,
-                players.jersey_number,
-                person.nationality
-            FROM person
-            INNER JOIN players ON person.id = players.person_id
-            WHERE person.picture IS NOT NULL
-            
-            UNION ALL
-            
-            SELECT 
-                person.id,
-                person.first_name,
-                person.last_name,
-                coaches.role,
-                person.picture,
-                NULL,
-                person.nationality
-            FROM person
-            INNER JOIN coaches ON person.id = coaches.person_id
-            WHERE person.picture IS NOT NULL
-            ORDER BY jersey_number
-        `;
+        const query = `SELECT * FROM players INNER JOIN person ON person.id = players.person_id ORDER BY jersey_number`;
         const result = await fetchPersons(query);
 
         if (result.rows.length === 0) {
@@ -144,8 +117,63 @@ exports.getNewPlayersWithoutStats = async(req, res) => {
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 }
-/*exports.postPlayerStats = async(req, res) => {
-    try{
-        const query
+exports.postPlayerStats = async (req, res) => {
+    const { player_id } = req.params; // Fetch player_id from URL parameters
+    const {
+        positions,
+        pace,
+        crossing,
+        shooting,
+        finishing,
+        shot_accuracy,
+        passing,
+        teamwork,
+        creativity,
+        dribbling,
+        strength,
+        tackling,
+        interceptions,
+        blocked_shots,
+        forward_heading,
+        stamina,
+    } = req.body; // Destructure all stats from the request body
+    console.log(positions)
+    try {
+        // Update the player's detailed positions
+        const updateQuery = 'UPDATE players SET detailed_positions = $1 WHERE player_id = $2';
+        await fetchPersons(updateQuery, [JSON.stringify(positions), player_id]);
+
+        // Insert the player's stats
+        const insertQuery = `
+            INSERT INTO player_stats (player_id, pace, crossing, shooting, finishing, shot_accuracy, 
+            passing, teamwork, creativity, dribbling, strength, tackling, interceptions, blocked_shots, 
+            forward_heading, stamina) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+        `;
+        await fetchPersons(insertQuery, [
+            player_id,
+            pace,
+            crossing,
+            shooting,
+            finishing,
+            shot_accuracy,
+            passing,
+            teamwork,
+            creativity,
+            dribbling,
+            strength,
+            tackling,
+            interceptions,
+            blocked_shots,
+            forward_heading,
+            stamina,
+        ]);
+
+        // Commit the transaction
+        res.status(200).json({ message: 'Статистика игрока успешно обновлена.' });
+    } catch (error) {
+        // Rollback the transaction in case of an error
+        console.error('Ошибка при обновлении статистики игрока:', error);
+        res.status(500).json({ error: 'Ошибка при обновлении статистики игрока: ' + error.message });
     }
-}*/
+};

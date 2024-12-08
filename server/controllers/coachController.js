@@ -23,7 +23,30 @@ exports.getCoaches = async (req, res) => {
         res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };
+exports.getCoachesById = async (req, res) => {
+    const {id} = req.params
+    try {
+        const query = `
+            SELECT 
+                person.id,
+                person.first_name,
+                person.last_name,
+                coaches.role
+            FROM person
+            INNER JOIN coaches ON person.id = coaches.person_id WHERE person.id = $1
+        `;
+        const result = await fetchPersons(query, [id]);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Тренеры не найдены' });
+        }
 
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Ошибка при получении данных:', error.message);
+        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
+    }
+};
 exports.addCoach = async (req, res) => {
     const { first_name, last_name, role } = req.body;
 

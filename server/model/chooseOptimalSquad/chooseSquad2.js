@@ -126,7 +126,7 @@ async function createStartingSquad() {
 
     const playerRatings = readyPlayers.map(player => {
         const ratings = [];
-        
+        console.log(player)
         for (const position of player.detailed_positions) {
             let rating = 0;
 

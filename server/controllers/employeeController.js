@@ -87,3 +87,18 @@ exports.getEmployees = async (req, res) => {
         res.status(500).json({ message: "Failed to retrieve employees.", error: error.message });
     }
 };
+exports.getOtherEmployees = async(req, res) => {
+    try {
+        const query = `
+            SELECT 
+                id, 
+                person_role, 
+                first_name || ' ' || last_name AS name
+            FROM person WHERE person_role != 'player' ORDER BY person_role, id`;
+        const result = await fetchPersons(query); // Предполагается, что fetchPersons выполняет запрос к базе данных
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error("Error fetching employees:", error);
+        res.status(500).json({ message: "Failed to retrieve employees.", error: error.message });
+    }
+}

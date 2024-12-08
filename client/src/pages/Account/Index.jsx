@@ -27,14 +27,6 @@ function Account() {
                     return (
                         <MedicPage user={user} photoUrl={photoUrl}/>
                     );
-                case 'fan':
-                    return (
-                        <div>
-                            <h2>Fan Area</h2>
-                            <p>OLE OLE OLE OLE</p>
-                            {/* Здесь добавьте компоненты для медика */}
-                        </div>
-                    );
                 case 'admin':
                     return (
                         <AdminPage user={user} photoUrl={photoUrl}/>

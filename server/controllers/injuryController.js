@@ -124,3 +124,37 @@ exports.deleteInjury = async (req, res) => {
         res.status(500).json({ message: 'Ошибка сервера' });
     }
 };
+exports.getInjuryByID = async (req, res) => {
+    const {id} = req.params
+    console.log(id)
+    try {
+        const query = `
+            SELECT
+                person.first_name || ' ' || person.last_name AS name,
+                injuries.injury_name,
+                player_injury.injury_id,
+                players.player_id,
+                injury_date,
+                return_date,
+                person.id AS person_id
+            FROM player_injury 
+            INNER JOIN players 
+            ON players.player_id = player_injury.player_id 
+            INNER JOIN person 
+            ON players.person_id = person.id
+            INNER JOIN injuries
+            ON injuries.injury_id = player_injury.injury_id
+            WHERE person_id = $1
+        `;
+        const result = await fetchPersons(query, [id]);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'У этого игрока не было травм' });
+        }
+
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Ошибка при получении данных о травмах:', error.message);
+        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
+    }
+};

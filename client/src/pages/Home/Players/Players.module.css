@@ -1,9 +1,63 @@
-.players__list{
+.players__list {
+    width: 100%;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
+    grid-template-columns: repeat(3, 1fr); /* Шесть столбцов, каждый занимает равную ширину */
+    gap: 100px; /* Убираем пробел между элементами */
+}
+.players__list > :first-child {
+    margin-left: 0; /* Убираем отступ слева у первого элемента */
+}
+
+.players__list > :last-child {
+    margin-right: 0; /* Убираем отступ справа у последнего элемента */
+}
+.players__list h3{
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+}
+.sortButton{
+    margin: 10px 20px 10px 0;
+    color: #fdc52c;
+    background: none;
+    padding: 10px 15px;
+    border: 1px solid #fdc52c;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.filter{
+    margin-top: 0;
+    height: 18px;
+    width: 18px;
+    margin-right: 10px;
+}
+.filterToggle{
+    display: flex;
     align-items: center;
-    gap: 30px;
+    color: #fdc52c;
+    border: 1px solid #fdc52c;
+    width: 150px;
+    padding: 10px 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+.filterToggle p{
+    line-height: 1;
+    margin: 0;
+}
+.filterOptions{
+    position: absolute;
+    z-index: 1;
+    background-color: #001847;
+}
+.filterOptions div{
+    padding: 10px 20px;
+    color: #fdc52c;
+    cursor: pointer;
 }

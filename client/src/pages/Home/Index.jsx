@@ -1,14 +1,17 @@
 import Header from "../../components/Header/Index";
-import Players from "../../components/Players/Index";
+import Players from "./Players/Index";
+import styles from './Home.module.css'
+import Employee from "./Employees/Index";
 function Home() {
     return (
-      <>
+      <div className={styles.home}>
         <Header />
-        <div>
+        <section>
           <h1>Welcome to the FC Barcelona page!</h1>
-          <Players></Players>
-        </div>
-      </>
+          <Players />
+          <Employee />
+        </section>
+      </div>
     );
   }
   

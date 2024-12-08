@@ -1,0 +1,17 @@
+.playerInfo{
+    padding: 20px;
+    color: #fdc52c;
+}
+.playerInfo ul{
+    padding: 10px 0;
+    font-size: 14px;
+}
+.playerInfo ul li{
+    padding: 5px 0;
+}
+.playerInfo h3{
+    color: #fdc52c;
+    font-style: italic;
+    font-size: 24px;
+    font-weight: 400;
+}
