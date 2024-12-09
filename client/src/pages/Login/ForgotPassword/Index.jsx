@@ -11,7 +11,7 @@ function ForgotPassword() {
         setEmailSubmitted(true);
         
         try {
-            const response = await fetch('http://localhost:5000/api/forgot', {
+            const response = await fetch('http://localhost:5000/api/auth/forgot', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -83,7 +83,7 @@ export default function Players() {
     }
 
     return (
-        <>
+        <div className={styles.players}>
             <h3>Players</h3>
             <div className={styles.filterContainer}>
                 <div className={styles.filterToggle} onClick={toggleFilter}>
@@ -118,6 +118,6 @@ export default function Players() {
                     <p>No players found</p>
                 )}
             </div>
-        </>
+        </div>
     );
 }

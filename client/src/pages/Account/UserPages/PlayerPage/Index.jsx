@@ -33,7 +33,7 @@ function PlayerPage({user, photoUrl}) {
             <Sidebar onItemClick={handleSidebarItemClick} />
             <div className={styles.accountmain}>
                 <PersonInfo user={user} photoUrl={photoUrl}/>
-                {selectedTab === 'requestContract' && <ContractRequest />}
+                {selectedTab === 'requestContract' && <ContractRequest person_id={user.id}/>}
                 {selectedTab === 'playerInfo' && <PlayerInfo user={user}/>}
             </div>
         </div>

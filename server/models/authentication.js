@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt')
-const { fetchPersons } = require('./dbaccess')
+const { fetchDB } = require('./dbaccess')
 async function findUserByEmail(email) {
     const query = 'SELECT * FROM person WHERE email = $1'
     const values = [email]
-    const result = await fetchPersons(query, values)
+    const result = await fetchDB(query, values)
     return result.rows[0]
 }
 async function authenticateUser(email, password) {

@@ -12,7 +12,7 @@ function DeleteEmployee() {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/getEmployees");
+                const response = await fetch("http://localhost:5000/api/employees");
                 if (!response.ok) {
                     throw new Error("Failed to fetch employees.");
                 }
@@ -34,31 +34,41 @@ function DeleteEmployee() {
         ? employees.filter(emp => emp.person_role === selectedRole) 
         : [];
 
-    const handleDelete = async () => {
-        setMessage('');
-        setError('');
-        setEmployeeId(selectedPerson.id)
-        try {
-            const response = await fetch(`http://localhost:5000/api/deleteEmployee/${employeeId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to delete employee.");
+        const handleDelete = async () => {
+            setMessage('');
+            setError('');
+        
+            // Используем selectedPerson.id вместо employeeId
+            const idToDelete = selectedPerson ? selectedPerson.id : null;
+        
+            if (!idToDelete) {
+                setError("No employee selected.");
+                return;
             }
-
-            const data = await response.json();
-            setMessage(data.message);
-            setEmployeeId('');
-            const updatedEmployees = employees.filter(emp => emp.id !== parseInt(employeeId));
-            setEmployees(updatedEmployees);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
+        
+            try {
+                const response = await fetch(`http://localhost:5000/api/employees/delete/${idToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+        
+                if (!response.ok) {
+                    throw new Error("Failed to delete employee.");
+                }
+        
+                const data = await response.json();
+                setMessage(data.message);
+        
+                // Обновляем список сотрудников
+                const updatedEmployees = employees.filter(emp => emp.id !== idToDelete);
+                setEmployees(updatedEmployees);
+                setSelectedPerson(null); // сбрасываем выбранного человека
+            } catch (error) {
+                setError(error.message);
+            }
+        };
 
     return (
         <div className={styles.deleteEmployee}>

@@ -1,5 +1,5 @@
-const { fetchPersons } = require('../model/dbaccess'); // Импортируйте вашу функцию для работы с БД
-const { createStartingSquad } = require('../model/chooseOptimalSquad/chooseSquad2'); // Импортируйте функцию для создания стартового состава
+const { fetchDB } = require('../models/dbaccess'); // Импортируйте вашу функцию для работы с БД
+const { createStartingSquad } = require('../models/chooseOptimalSquad/chooseSquad2'); // Импортируйте функцию для создания стартового состава
 const XLSX = require('xlsx');
 const path = require('path');
 const fs = require('fs');
@@ -51,7 +51,7 @@ exports.getSquad = async (req, res) => {
             INNER JOIN 
                 players ON person.id = players.person_id
         `;
-        const players = await fetchPersons(query);
+        const players = await fetchDB(query);
 
         // Создаем карту для быстрого доступа к полным именам и номерам футболок по их ID
         const playerMap = {};

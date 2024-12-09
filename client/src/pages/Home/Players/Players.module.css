@@ -13,7 +13,7 @@
 .players__list > :last-child {
     margin-right: 0; /* Убираем отступ справа у последнего элемента */
 }
-.players__list h3{
+.players h3{
     color: #fdc52c;
     font-size: 24px;
     font-style: italic;

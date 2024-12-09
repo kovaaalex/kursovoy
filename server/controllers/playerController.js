@@ -1,9 +1,9 @@
-const { fetchPersons } = require('../model/dbaccess');
+const { fetchDB } = require('../models/dbaccess');
 
 exports.getPlayers = async (req, res) => {
     try {
         const query = `SELECT * FROM players INNER JOIN person ON person.id = players.person_id ORDER BY jersey_number`;
-        const result = await fetchPersons(query);
+        const result = await fetchDB(query);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Ни игроки, ни тренеры не найдены' });
@@ -28,7 +28,7 @@ exports.getCurrentPlayers = async (req, res) => {
             INNER JOIN players ON players.person_id = person.id 
             ORDER BY jersey_number
         `;
-        const result = await fetchPersons(query);
+        const result = await fetchDB(query);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Игроки не найдены' });
         }
@@ -50,7 +50,7 @@ exports.updatePlayerPermission = async (req, res) => {
 
     try {
         const query = `UPDATE players SET is_injured = $1 WHERE player_id = $2`;
-        const result = await fetchPersons(query, [is_injured, player_id]);
+        const result = await fetchDB(query, [is_injured, player_id]);
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'Игрок не найден' });
         }
@@ -71,7 +71,7 @@ exports.addPlayerInjury = async (req, res) => {
     try {
         const query = `INSERT INTO player_injury VALUES($1, $2, $3, $4)`;
         const values = [injury_id, player_id, start_date, end_date];
-        await fetchPersons(query, values);
+        await fetchDB(query, values);
         return res.status(201).json({ message: 'Данные о травме добавлены успешно' });
     } catch (error) {
         console.error('Ошибка при добавлении данных о травме:', error);
@@ -85,7 +85,7 @@ exports.getPlayerStats = async(req, res) => {
             INNER JOIN players 
             ON players.player_id = player_stats.player_id
             INNER JOIN person ON players.person_id = person.id`
-        const result = await fetchPersons(query)
+        const result = await fetchDB(query)
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Статистики игроков не найдены' });
         }
@@ -109,7 +109,7 @@ exports.getNewPlayersWithoutStats = async(req, res) => {
             FROM player_stats
         ) AND 
         position !='Goalkeeper'`
-        const result = await fetchPersons(query)
+        const result = await fetchDB(query)
         res.json(result.rows);
     } catch (error) {
         
@@ -141,7 +141,7 @@ exports.postPlayerStats = async (req, res) => {
     try {
         // Update the player's detailed positions
         const updateQuery = 'UPDATE players SET detailed_positions = $1 WHERE player_id = $2';
-        await fetchPersons(updateQuery, [JSON.stringify(positions), player_id]);
+        await fetchDB(updateQuery, [JSON.stringify(positions), player_id]);
 
         // Insert the player's stats
         const insertQuery = `
@@ -150,7 +150,7 @@ exports.postPlayerStats = async (req, res) => {
             forward_heading, stamina) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
         `;
-        await fetchPersons(insertQuery, [
+        await fetchDB(insertQuery, [
             player_id,
             pace,
             crossing,

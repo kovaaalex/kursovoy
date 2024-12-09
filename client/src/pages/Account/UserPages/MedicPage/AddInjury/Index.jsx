@@ -18,7 +18,7 @@ function AddInjury() {
     useEffect(() => {
         const getPlayers = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/currentplayers');
+                const response = await fetch('http://localhost:5000/api/players/current');
                 if (!response.ok) {
                     throw new Error("Network response was not okay");
                 }
@@ -47,7 +47,7 @@ function AddInjury() {
         };
         const getInjuriesList = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/injuriesList');
+                const response = await fetch('http://localhost:5000/api/injuries/list');
                 if (!response.ok) {
                     throw new Error("Network response was not okay");
                 }
@@ -96,7 +96,7 @@ function AddInjury() {
         };
 
         try {
-            const response = await fetch('http://localhost:5000/api/player_injury', {
+            const response = await fetch('http://localhost:5000/api/injuries', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

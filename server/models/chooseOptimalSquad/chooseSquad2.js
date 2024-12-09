@@ -1,9 +1,9 @@
-const { fetchPersons } = require('../dbaccess');
+const { fetchDB } = require('../dbaccess');
 const { findMaxRatingsByPosition } = require('./graph');
 
 async function fetchPlayers() {
     try {
-        const result = await fetchPersons('SELECT * FROM players LEFT JOIN player_stats ON players.player_id = player_stats.player_id INNER JOIN person ON person.id = players.person_id');
+        const result = await fetchDB('SELECT * FROM players LEFT JOIN player_stats ON players.player_id = player_stats.player_id INNER JOIN person ON person.id = players.person_id');
         return result.rows;
     } catch (error) {
         console.error(error);
@@ -224,7 +224,7 @@ async function createStartingSquad() {
             ratings[winger.player_id][position] = winger.ratings[index];
         });
     });
-
+    console.log(wingers)
     let ratings3 = {};
     for (let playerId in ratings) {
         ratings3[playerId] = {
@@ -270,7 +270,6 @@ async function createStartingSquad() {
     let midToRemove = new Set(Object.values(cm).map(el => el.player));
     midToRemove = new Set(Array.from(midToRemove).map(el => +el));
     
-    console.log(startSquad);
     return startSquad;
 }
 module.exports = {createStartingSquad};

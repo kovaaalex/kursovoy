@@ -127,7 +127,7 @@ function Squad() {
         }));
     
         try {
-            const response = await fetch('http://localhost:5000/api/saveSquad', {
+            const response = await fetch('http://localhost:5000/api/squad/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

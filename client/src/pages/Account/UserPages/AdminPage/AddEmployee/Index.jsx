@@ -11,6 +11,8 @@ function AddEmployee() {
     const [contractUntil, setContractUntil] = useState('');
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [image, setImage] = useState(null); // State for the image
+    const joined_at = new Date();
 
     // Player specific fields
     const [playerNumber, setPlayerNumber] = useState('');
@@ -43,25 +45,34 @@ function AddEmployee() {
             dateOfBirth,
             nationality,
             role,
+            joined_at,
             email,
+            image,
             contractUntil,
             ...(role === 'player' && { playerNumber, position }),
             ...(role === 'coach' && { coachRole }),
         };
 
+        // Create FormData for image upload
+        const formData = new FormData();
+        formData.append('employeeData', JSON.stringify(payload));
+        if (image) {
+            formData.append('image', image); // Append image only if it exists
+        }
+
         try {
-            const response = await fetch('http://localhost:5000/api/addEmployee', {
+            const response = await fetch('http://localhost:5000/api/employees/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(payload),
             });
-
+    
             if (!response.ok) {
                 throw new Error("Failed to add employee.");
             }
-
+    
             setSuccessMessage("Employee added successfully!");
             resetForm();
         } catch (error) {
@@ -80,8 +91,38 @@ function AddEmployee() {
         setPlayerNumber('');
         setPosition('');
         setCoachRole('main');
+        setImage(null); // Reset image
         setError('');
         setSuccessMessage('');
+    };
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setImage(file);
+
+        if (file) {
+            // Determine the role and create the path
+            let rolePath = '';
+            switch (role) {
+                case 'player':
+                    rolePath = 'players/';
+                    break;
+                case 'coach':
+                    rolePath = 'coaches/';
+                    break;
+                case 'medic':
+                    rolePath = 'medics/';
+                    break;
+                case 'admin':
+                    rolePath = 'admins/';
+                    break;
+                default:
+                    rolePath = 'others/';
+            }
+            const imagePath = `${rolePath}${file.name}`;
+            alert(`Selected file path: ${imagePath}`);
+            setImage(imagePath)
+        }
     };
 
     return (
@@ -147,7 +188,7 @@ function AddEmployee() {
                 <div>
                     <label>Role:</label>
                     <div className={styles.roleContainer}>
-                        {['player', 'coach', 'medic'].map((option) => (
+                        {['player', 'coach', 'medic', 'admin'].map((option) => (
                             <div
                                 key={option}
                                 className={`${styles.roleOption} ${role === option ? styles.selected : ''}`}
@@ -215,6 +256,20 @@ function AddEmployee() {
                         </div>
                     </div>
                 )}
+
+                <div>
+                    <label>Upload Image (optional):</label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        style={{ display: 'none' }} // Скрываем стандартный input
+                        id="file-upload"
+                    />
+                    <label htmlFor="file-upload" className={styles.updPhoto}>
+                        Choose image
+                    </label>
+                </div>
 
                 <button type="submit">Add Employee</button>
             </form>

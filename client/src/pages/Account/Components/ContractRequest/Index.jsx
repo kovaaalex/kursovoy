@@ -10,24 +10,34 @@ function ContractRequest({ person_id }) {
 
     useEffect(() => {
         const fetchRequestById = async () => {
-            setLoading(true)
+            setLoading(true);
             try {
-                const response = await fetch(`http://localhost:5000/api/contractRequests/${person_id}`);
-                if (!response.ok) {
-                    throw new Error('Запрос не найден');
-                }
+                alert(person_id)
+                const response = await fetch(`http://localhost:5000/api/contracts/requests/${person_id}`);
                 const data = await response.json();
-        
+    
+                // Handle the case when no requests are found
+                if (data.message && data.message === "Запросов на контракт не найдено") {
+                    return; // Exit early
+                }
+    
+                // Check if the response indicates an error
+                if (!response.ok) {
+                    throw new Error(data.message || 'Ошибка при получении запроса');
+                }
+    
                 // Check if data is an object and wrap it in an array
                 const requests = Array.isArray(data) ? data : [data];
                 setSelectedRequest(requests);
+    
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false); // Stop loading
             }
         };
-        fetchRequestById()  
+    
+        fetchRequestById();
     }, [person_id]);
 
     const handleSubmit = async (e) => {
@@ -35,7 +45,7 @@ function ContractRequest({ person_id }) {
         const requestData = { newContractDue, person_id, newSalary };
 
         try {
-            const response = await fetch('http://localhost:5000/api/contractRequests', {
+            const response = await fetch('http://localhost:5000/api/contracts/requests', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

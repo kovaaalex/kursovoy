@@ -8,6 +8,7 @@ import Registration from './pages/Login/Registration/Index';
 import ForgotPassword from './pages/Login/ForgotPassword/Index';
 import ProtectedRoute from './components/ProtectedRoute/Index';
 import NotFound from './pages/Error/NotFound/Index';
+import EnterCode from './pages/Login/EnterCode/Index';
 function App() {
   return (
     <Router>
@@ -27,7 +28,8 @@ function App() {
               } 
             />
             <Route path='/forgot' element={<ForgotPassword />}></Route>
-            <Route path='*' element={<NotFound />} /> {/* Для 404 */}
+            <Route path='/enter-code' element={<EnterCode />} />
+            <Route path='*' element={<NotFound />} />
           </Routes>
         </main>
       </div>

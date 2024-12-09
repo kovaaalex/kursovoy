@@ -7,7 +7,7 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT
 })
-async function fetchPersons(myQuery, params = []) {
+async function fetchDB(myQuery, params = []) {
     try {
         const res = await pool.query(myQuery, params)
         return res
@@ -17,5 +17,5 @@ async function fetchPersons(myQuery, params = []) {
 }
 module.exports = {
     pool,
-    fetchPersons
+    fetchDB
 }

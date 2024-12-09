@@ -1,4 +1,4 @@
-const { fetchPersons } = require('../model/dbaccess');
+const { fetchDB } = require('../models/dbaccess');
 
 exports.getSchedule = async (req, res) => {
     try {
@@ -22,7 +22,7 @@ exports.getSchedule = async (req, res) => {
             INNER JOIN clubs AS awayclub
             ON football_match.awayteam = awayclub.id
             ORDER BY date `
-        const result = await fetchPersons(query)
+        const result = await fetchDB(query)
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Не найдены матчи' });
         }
@@ -46,7 +46,7 @@ exports.addMatch = async (req, res) => {
             VALUES ($1, $2, $3, $4, $5) RETURNING id
         `;
         const values = [home_team_id, away_team_id, date, time, stadium];
-        const result = await fetchPersons(query, values);
+        const result = await fetchDB(query, values);
 
         res.status(201).json({ message: 'Матч добавлен успешно', matchId: result.rows[0].id });
     } catch (error) {
@@ -92,7 +92,7 @@ exports.updateMatch = async (req, res) => {
 
     try {
         const query = `UPDATE match SET ${updates.join(', ')} WHERE id = $${index}`;
-        const result = await fetchPersons(query, values);
+        const result = await fetchDB(query, values);
         
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'Матч не найден' });
@@ -110,7 +110,7 @@ exports.deleteMatch = async (req, res) => {
 
     try {
         const query = `DELETE FROM match WHERE id = $1`;
-        const result = await fetchPersons(query, [id]);
+        const result = await fetchDB(query, [id]);
 
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'Матч не найден' });
