@@ -14,7 +14,7 @@ export default function ScoreMatch({match}) {
                         <h2>{match.score_home}</h2>
                     </div>
                 </div>
-                <h2>:</h2>
+                <h2 className={styles.tw}>:</h2>
                 <div className={styles.team} id={styles.awayteam}>   
                     <div className={styles.team__scores}>
                         <h2>{match.score_away}</h2>

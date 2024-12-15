@@ -10,7 +10,6 @@ function PlayerPage({user, photoUrl}) {
     const [selectedTab, setSelectedTab] = useState('requestContract');
 
     const handleSidebarItemClick = (tab) => {
-        alert(user.id)
         if (tab === 'home') {
             navigate('/')
         }
@@ -33,8 +32,8 @@ function PlayerPage({user, photoUrl}) {
             <Sidebar onItemClick={handleSidebarItemClick} />
             <div className={styles.accountmain}>
                 <PersonInfo user={user} photoUrl={photoUrl}/>
-                {selectedTab === 'requestContract' && <ContractRequest />}
-                {selectedTab === 'playerInfo' && <PlayerInfo />}
+                {selectedTab === 'requestContract' && <ContractRequest person_id={user.id}/>}
+                {selectedTab === 'playerInfo' && <PlayerInfo user={user}/>}
             </div>
         </div>
     )

@@ -1,53 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import styles from './ContractRequest.module.css'; // Import your CSS file
+import styles from './ContractRequest.module.css';
 
 function ContractRequest({ person_id }) {
     const [newContractDue, setNewContractDue] = useState('');
     const [newSalary, setNewSalary] = useState('');
-    const [requests, setRequests] = useState([]);
-    const [selectedRequest, setSelectedRequest] = useState(null);
+    const [selectedRequest, setSelectedRequest] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const fetchRequests = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch('http://localhost:5000/api/contract-requests');
-            if (!response.ok) {
-                throw new Error('Не удалось загрузить историю запросов');
-            }
-            const data = await response.json();
-            setRequests(data);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const fetchRequestById = async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/contract-requests/${person_id}`);
-            if (!response.ok) {
-                throw new Error('Запрос не найден');
-            }
-            const data = await response.json();
-            setSelectedRequest(data);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
     useEffect(() => {
-        fetchRequests();
-    }, []);
+        const fetchRequestById = async () => {
+            setLoading(true);
+            try {
+                alert(person_id)
+                const response = await fetch(`http://localhost:5000/api/contracts/requests/${person_id}`);
+                const data = await response.json();
+    
+                // Handle the case when no requests are found
+                if (data.message && data.message === "Запросов на контракт не найдено") {
+                    return; // Exit early
+                }
+    
+                // Check if the response indicates an error
+                if (!response.ok) {
+                    throw new Error(data.message || 'Ошибка при получении запроса');
+                }
+    
+                // Check if data is an object and wrap it in an array
+                const requests = Array.isArray(data) ? data : [data];
+                setSelectedRequest(requests);
+    
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false); // Stop loading
+            }
+        };
+    
+        fetchRequestById();
+    }, [person_id]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const requestData = { newContractDue, person_id, newSalary };
 
         try {
-            const response = await fetch('http://localhost:5000/api/contract-requests', {
+            const response = await fetch('http://localhost:5000/api/contracts/requests', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +58,6 @@ function ContractRequest({ person_id }) {
             }
             setNewContractDue('');
             setNewSalary('');
-            fetchRequests();
         } catch (err) {
             setError(err.message);
         }
@@ -95,21 +92,18 @@ function ContractRequest({ person_id }) {
             </form>
 
             <h3>Requests history</h3>
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
+            {Array.isArray(selectedRequest) && selectedRequest.length > 0 ? (
                 <ul className={styles.contractList}>
-                    {selectedRequest && selectedRequest.length > 0 ? (
-                        selectedRequest.map((request) => (
-                            <li key={request.contract_id}>
-                                Request date: {formatDate(request.request_date)}, New Contract Due: {formatDate(request.new_contract_due)}, New salary: {request.new_salary}, Request salary: {request.can_update === null ? "Under consideration" : (request.can_update ? "Approved" : "Not Approved")}
-                            </li>
-                        ))
-                    ) : (
-                        <li>No selected requests available.</li> // Сообщение, если нет выбранных запросов
-                    )}
+                    {selectedRequest.map((request) => (
+                        <li key={request.contract_id}>
+                            Request date: {formatDate(request.request_date)}, New Contract Due: {formatDate(request.new_contract_due)}, New salary: {request.new_salary}, Request salary: {request.can_update === null ? "Under consideration" : (request.can_update ? "Approved" : "Not Approved")}
+                        </li>
+                    ))}
                 </ul>
+            ) : (
+                <p>No requests found.</p>
             )}
+
             {error && <div className="error-message">Error: {error}</div>}
         </div>
     );

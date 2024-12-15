@@ -1,5 +1,5 @@
 import React from 'react';
-import StartPlayer from './StartPlayer/index';
+import StartPlayer from './StartPlayer';
 import styles from './Line.module.css';
 
 function Line({ players, onPlayerClick }) {
@@ -7,9 +7,11 @@ function Line({ players, onPlayerClick }) {
         <div className={styles.line}>
             {players.map((player) => (
                 <StartPlayer
-                    key={player.id} // Убедитесь, что player.id уникален
+                    key={player.id}
                     jerseyNumber={player.jersey_number}
-                    fullName={player.fullName}
+                    name={player.name}
+                    position={player.position}
+                    detailed_positions={player.detailed_positions}
                     onClick={() => onPlayerClick(player)}
                 />
             ))}
@@ -17,4 +19,4 @@ function Line({ players, onPlayerClick }) {
     );
 }
 
-export default Line;
+export default Line;    

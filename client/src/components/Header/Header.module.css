@@ -1,9 +1,7 @@
 header{
     display: flex;
     flex-direction: column;
-    background: #0a0927;
     padding: 15px 0;
-    position: sticky;
     top: 0;
     z-index: 100;
     overflow: hidden; /* Скрывает переполнение */

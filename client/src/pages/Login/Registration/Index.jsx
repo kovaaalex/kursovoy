@@ -5,63 +5,66 @@ import { useNavigate } from 'react-router-dom';
 import styles from '../login.module.css';
 
 export default function Registration() {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-    const [birthDate, setBirthDate] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
-    const [isPasswordValid, setIsPasswordValid] = useState(false); // Состояние для проверки пароля
+    const [isPasswordValid, setIsPasswordValid] = useState(false);
     const navigate = useNavigate();
+    
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const lowercase = 'abcdefghijklmnopqrstuvwxyz';
     const digits = '0123456789';
     const minLength = 8, maxLength = 16;
     const allChars = uppercase + lowercase + digits;
-    const regex = /(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])/;
 
     function generatePassword() {
         let length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
         let password = '';
-    
-        // Гарантируем наличие хотя бы одного символа каждого типа
-        password += uppercase[Math.floor(Math.random() * uppercase.length)]; // Одна заглавная буква
-        password += lowercase[Math.floor(Math.random() * lowercase.length)]; // Одна строчная буква
-        password += digits[Math.floor(Math.random() * digits.length)]; // Одна цифра
-    
-        // Заполняем оставшуюся длину пароля случайными символами
+
+        password += uppercase[Math.floor(Math.random() * uppercase.length)];
+        password += lowercase[Math.floor(Math.random() * lowercase.length)];
+        password += digits[Math.floor(Math.random() * digits.length)];
+
         for (let index = 3; index < length; index++) {
             password += allChars[Math.floor(Math.random() * allChars.length)];
         }
-    
-        // Перемешиваем символы пароля (чтобы случайно расположить гарантированные символы)
+
         password = password.split('').sort(() => Math.random() - 0.5).join('');
-    
         return password;
     }
 
     function checkRegisterPassword(inputPassword) {
-        return regex.test(inputPassword) && inputPassword.length >= minLength && inputPassword.length <= maxLength;
+        const regex = /(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])/;
+        return regex.test(inputPassword) && inputPassword.length >= 8 && inputPassword.length <= 16;
     }
 
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
         setPassword(newPassword);
-        setIsPasswordValid(checkRegisterPassword(newPassword)); // Проверка валидности пароля
+        setIsPasswordValid(checkRegisterPassword(newPassword));
+    };
+
+    const handlePasswordClick = () => {
+        if (!password) {
+            const generatedPassword = generatePassword();
+            setPassword(generatedPassword);
+            setRepeatPassword(generatedPassword);
+            setIsPasswordValid(checkRegisterPassword(generatedPassword));
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (repeatPassword !== password) {
             alert('Пароли не сопадают');
             return;
         }
-
+    
         try {
-            const response = await fetch('http://localhost:5000/api/register', {
+            const response = await fetch('http://localhost:5000/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,12 +72,13 @@ export default function Registration() {
                 body: JSON.stringify({ email, password }),
             });
             const data = await response.json();
-
+    
             if (response.ok) {
+                alert(data.code)
                 localStorage.setItem('user', JSON.stringify(data.user));
                 localStorage.setItem('token', data.token);
-                alert('Успешная регистрация!');
-                navigate('/account', { state: { user: data.user } });
+                localStorage.setItem('success', data.success);
+                navigate('/enter-code', { state: { email, sentCode: data.code, user: data.user, success: data.success } });
             } else {
                 alert(data.message || 'Invalid credentials');
             }
@@ -113,15 +117,9 @@ export default function Registration() {
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
                             value={password}
-                            onChange={handlePasswordChange} // Обработка изменения пароля
-                            onClick={() => {
-                                if(!password) {
-                                    let pass = generatePassword();
-                                    setPassword(pass);
-                                    setRepeatPassword(pass);
-                                }
-                            }}
-                            className={`${styles.inputField} ${isPasswordValid ? styles.valid : styles.invalid}`} // Условные классы
+                            onChange={handlePasswordChange}
+                            onClick={handlePasswordClick}
+                            className={`${styles.inputField} ${isPasswordValid ? styles.valid : styles.invalid}`}
                             id="password"
                         />
                         <FontAwesomeIcon

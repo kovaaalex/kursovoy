@@ -1,0 +1,46 @@
+.employees h3{
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+}
+.container {
+    border: 2px solid #fdc52c;
+    color: #fdc52c;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    font-weight: bold;
+    border-bottom: 2px solid #fdc52c;
+}
+
+.header div {
+    flex: 1;
+    padding: 10px;
+    border: #fdc52c 2px solid;
+    text-align: center;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #fdc52c;
+}
+.row div{
+    width: 50%;
+    border: 1px solid #fdc52c;
+    padding: 10px;
+}
+.row:last-child {
+    border-bottom: none;
+}

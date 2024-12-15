@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar/Index";
 import FileDownloader from "../../Components/FileDownloader/Index";
-import ContractRequest from "../../Components/ContractRequest/Index";
+import ContractRequest from "./CheckContractRequests/Index";
 import styles from './AdminPage.module.css'
 import PersonInfo from "../../Components/PersonInfo/Index";
 import AddEmployee from "./AddEmployee/Index";
@@ -27,6 +27,7 @@ function AdminPage({user, photoUrl}) {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         localStorage.removeItem('photoUrl');
+        localStorage.removeItem('success')
         // Перенаправление на страницу входа
         navigate('/login');
     }

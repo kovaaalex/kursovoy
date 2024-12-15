@@ -41,7 +41,7 @@ function InjuryHistory() {
                 <ul className={styles.injuryList}>
                     {injuries.map((injury) => (
                         <li key={injury.injury_id} className={styles.injuryItem}>
-                            {injury.name} - {injury.injury_name} (С: {formatDate(injury.injury_date)} до: {formatDate(injury.return_date)})
+                            {injury.name} - {injury.injury_name} (Since: {formatDate(injury.injury_date)} Due to: {formatDate(injury.return_date)})
                         </li>
                     ))}
                 </ul>

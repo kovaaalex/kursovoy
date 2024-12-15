@@ -4,8 +4,9 @@ import { jwtDecode } from "jwt-decode";
 const ProtectedRoute = ({ children }) => {
     
     const token = localStorage.getItem('token');
+    const success = localStorage.getItem('success');
     // Если токена нет, перенаправляем на страницу входа
-    if (!token) {
+    if (!token || success === "false") {
         return <Navigate to="/login" />;
     }
 

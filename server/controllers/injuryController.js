@@ -1,11 +1,11 @@
-const { fetchPersons } = require('../model/dbaccess');
+const { fetchDB } = require('../models/dbaccess');
 exports.getInjuriesList = async (req, res) => {
     try {
         const query = `
             SELECT * FROM injuries
         `;
-        const result = await fetchPersons(query);
-        
+        const result = await fetchDB(query);
+        console.log(result)
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Травмы не найдены' });
         }
@@ -34,7 +34,7 @@ exports.getInjuries = async (req, res) => {
             INNER JOIN injuries
             ON injuries.injury_id = player_injury.injury_id
         `;
-        const result = await fetchPersons(query);
+        const result = await fetchDB(query);
         
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Травмы не найдены' });
@@ -55,9 +55,9 @@ exports.addInjury = async (req, res) => {
     }
 
     try {
-        const query = `INSERT INTO player_injury (injury_id, player_id, start_date, end_date) VALUES($1, $2, $3, $4)`;
+        const query = `INSERT INTO player_injury (injury_id, player_id, injury_date, return_date) VALUES($1, $2, $3, $4)`;
         const values = [injury_id, player_id, start_date, end_date];
-        await fetchPersons(query, values);
+        await fetchDB(query, values);
         return res.status(201).json({ message: 'Данные о травме добавлены успешно' });
     } catch (error) {
         console.error('Ошибка при добавлении данных о травме:', error);
@@ -66,35 +66,13 @@ exports.addInjury = async (req, res) => {
 };
 
 exports.updateInjury = async (req, res) => {
+    console.log(req.params)
     const { id } = req.params;
-    const { injury_id, start_date, end_date } = req.body;
-
-    if (!injury_id && !start_date && !end_date) {
-        return res.status(400).json({ message: 'Необходимо указать хотя бы одно поле для обновления' });
-    }
-
-    const updates = [];
-    const values = [];
-    let index = 1;
-
-    if (injury_id) {
-        updates.push(`injury_id = $${index++}`);
-        values.push(injury_id);
-    }
-    if (start_date) {
-        updates.push(`start_date = $${index++}`);
-        values.push(start_date);
-    }
-    if (end_date) {
-        updates.push(`end_date = $${index++}`);
-        values.push(end_date);
-    }
-
-    values.push(id); // Добавляем ID травмы в конец массива
+    const { is_injured } = req.body;
 
     try {
-        const query = `UPDATE player_injury SET ${updates.join(', ')} WHERE id = $${index}`;
-        const result = await fetchPersons(query, values);
+        const query = `UPDATE players SET is_injured = $1 WHERE player_id = $2`;
+        const result = await fetchDB(query, [is_injured, id]);
         
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'Травма не найдена' });
@@ -112,7 +90,7 @@ exports.deleteInjury = async (req, res) => {
 
     try {
         const query = `DELETE FROM player_injury WHERE id = $1`;
-        const result = await fetchPersons(query, [id]);
+        const result = await fetchDB(query, [id]);
 
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'Травма не найдена' });
@@ -122,5 +100,39 @@ exports.deleteInjury = async (req, res) => {
     } catch (error) {
         console.error('Ошибка при удалении травмы:', error);
         res.status(500).json({ message: 'Ошибка сервера' });
+    }
+};
+exports.getInjuryByID = async (req, res) => {
+    const {id} = req.params
+    console.log(id)
+    try {
+        const query = `
+            SELECT
+                person.first_name || ' ' || person.last_name AS name,
+                injuries.injury_name,
+                player_injury.injury_id,
+                players.player_id,
+                injury_date,
+                return_date,
+                person.id AS person_id
+            FROM player_injury 
+            INNER JOIN players 
+            ON players.player_id = player_injury.player_id 
+            INNER JOIN person 
+            ON players.person_id = person.id
+            INNER JOIN injuries
+            ON injuries.injury_id = player_injury.injury_id
+            WHERE person_id = $1
+        `;
+        const result = await fetchDB(query, [id]);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'У этого игрока не было травм' });
+        }
+
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Ошибка при получении данных о травмах:', error.message);
+        res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 };

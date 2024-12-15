@@ -30,7 +30,7 @@ function SetStats() {
     useEffect(() => {
         const getPlayersWithoutStats = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/getPlayersWithoutStats');
+                const response = await fetch('http://localhost:5000/api/players/withoutStats');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -57,7 +57,7 @@ function SetStats() {
         }
 
         const playerStats = {
-            player_id: selectedPerson.id,
+            player_id: selectedPerson.player_id,
             pace,
             crossing,
             shooting,
@@ -73,11 +73,14 @@ function SetStats() {
             blocked_shots,
             forward_heading,
             stamina,
+            positions: selectedPositions,
         };
 
         try {
-            const response = await fetch(`/api/postPlayerStats/${selectedPerson.id}`, {
-                method: 'POST',
+            const player_id = selectedPerson.player_id
+            alert(player_id)
+            const response = await fetch(`http://localhost:5000/api/players/stats/${player_id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -85,6 +88,7 @@ function SetStats() {
             });
 
             if (!response.ok) {
+                const errorBody = await response.text()
                 throw new Error('Network response was not ok');
             }
 

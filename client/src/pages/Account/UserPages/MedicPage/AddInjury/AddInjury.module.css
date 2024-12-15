@@ -65,3 +65,10 @@
     padding: 10px 0;
     color: #fdc52c;
 }
+.container input{
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}

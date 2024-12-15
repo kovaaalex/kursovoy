@@ -1,0 +1,52 @@
+.checkContractRequests{
+    padding: 20px;
+    color: #fdc52c;
+}
+.checkContractRequests h2{
+    color: #fdc52c;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    padding: 10px 0;
+}
+.checkContractRequests {
+    margin: 20px;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #fdc52c;
+    margin-bottom: 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #fdc52c;
+}
+
+.header {
+    font-weight: bold;
+}
+
+.row:last-child {
+    border-bottom: none; /* Remove border from last row */
+}
+
+.row div {
+    flex: 1;
+    text-align: left;
+}
+
+.row div:last-child {
+    text-align: center; /* Center align actions */
+}
+.updateContract{
+    background: none;
+    border: 1px solid #fdc52c;
+    color: #fdc52c;
+    padding: 5px 8px;
+    border-radius: 20px;
+}

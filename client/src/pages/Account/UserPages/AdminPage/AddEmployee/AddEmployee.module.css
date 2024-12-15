@@ -72,3 +72,12 @@
 .AddEmployee label{
     margin-top: 10px;
 }
+.updPhoto {
+    display: inline-block; /* Чтобы кнопка выглядела как кнопка */
+    background: none;
+    border: 1px solid #fdc52c;
+    color: #fdc52c;
+    padding: 5px 8px;
+    border-radius: 20px;
+    cursor: pointer; /* Указатель для кнопки */
+}
