@@ -5,22 +5,16 @@ import styles from '../login.module.css';
 export default function EnterCode() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { email, sentCode, user } = location.state || {}; // Удалил success, если он не используется
+    const { email, sentCode, user } = location.state || {}
     const [code, setCode] = useState('');
 
     const handleCodeSubmit = (e) => {
         e.preventDefault();
-        
-        // Отладочные выводы
         console.log('Entered code:', code);
         console.log('Sent code:', sentCode);
-        
         if (code === sentCode) {
-            alert(`User Role: ${user.person_role}`);
-            alert(user.role);
 
-            // Обновляем состояние success
-            localStorage.setItem('success', 'true'); // Сохраняем как строку
+            localStorage.setItem('success', 'true');
             navigate('/account', { state: { email, user } });
         } else {
             alert('Некорректный код. Пожалуйста, попробуйте снова.');

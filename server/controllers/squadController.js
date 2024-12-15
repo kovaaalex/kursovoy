@@ -6,43 +6,25 @@ const fs = require('fs');
 exports.getSquad = async (req, res) => {
     try {
         const squad = await createStartingSquad();
-        const uniqueIds = new Set();
-
-        // Проходим по значениям объекта
-        for (const value of Object.values(squad)) {
-            if (Array.isArray(value)) {
-                // Если значение - массив, добавляем все его элементы
-                value.forEach(id => uniqueIds.add(id));
-            } else {
-                // Если значение - одиночное число, добавляем его
-                uniqueIds.add(value);
-            }
+        if (squad.error) {
+            return res.status(400).json({ error: squad.error }); // Возвращаем сообщение об ошибке
         }
-
-        // Преобразуем Set обратно в массив, если это необходимо
-        const uniqueIdsArray = Array.from(uniqueIds);
-
-        const idPositionArray = [];
-        // Создаем idPositionArray из объекта squad
-        for (const position in squad) {
-            const id = squad[position];
+        const result = Object.entries(squad).flatMap(([position, id]) => {
             if (Array.isArray(id)) {
-                id.forEach(playerId => {
-                    idPositionArray.push({ id: playerId, squadPosition: position });
-                });
+                return id.map(playerId => ({ id: playerId, position }));
             } else {
-                idPositionArray.push({ id: id, squadPosition: position });
+                return { id, position };
             }
-        }
+        });
+
+        console.log(result);
 
         // SQL-запрос для получения данных игроков
         const query = `
             SELECT 
                 person.id AS person_id,
-                person.first_name,
-                person.last_name,
+                person.first_name || ' ' || person.last_name AS name,
                 players.player_id,
-                players.position,
                 players.jersey_number,
                 players.detailed_positions,
                 players.is_injured
@@ -52,33 +34,33 @@ exports.getSquad = async (req, res) => {
                 players ON person.id = players.person_id
         `;
         const players = await fetchDB(query);
+        console.log(players.rows);
 
         // Создаем карту для быстрого доступа к полным именам и номерам футболок по их ID
         const playerMap = {};
         players.rows.forEach(player => {
-            const fullName = `${player.first_name} ${player.last_name}`;
             playerMap[player.player_id] = {
-                fullName: fullName,
+                fullName: player.name,
                 jersey_number: player.jersey_number,
                 detailed_positions: player.detailed_positions,
                 is_injured: player.is_injured
             };
         });
 
-        // Теперь заменяем ID в idPositionArray на полные имена и номера футболок
-        const finalSquad = idPositionArray.map(item => ({
+        // Создаем финальный состав с id, позицией и дополнительными полями
+        const finalSquad = result.map(item => ({
             id: item.id,
-            squadPosition: item.squadPosition,
-            fullName: playerMap[item.id]?.fullName || null,
+            position: item.position,
+            name: playerMap[item.id]?.fullName || null,
             jersey_number: playerMap[item.id]?.jersey_number || null,
-            detailed_positions: playerMap[item.id]?.detailed_positions || null,
-            is_injured: playerMap[item.id]?.is_injured
+            detailed_positions: playerMap[item.id]?.detailed_positions || null
         }));
 
-        const bench = players.rows.filter(player => !uniqueIdsArray.includes(player.player_id));
+        // Получение скамейки запасных
+        const bench = players.rows.filter(player => !result.map(item => item.id).includes(player.player_id));
         const transformedArray = bench.map(player => ({
             id: player.player_id,
-            fullName: `${player.first_name} ${player.last_name}`,
+            name: player.name,
             jersey_number: player.jersey_number,
             squadPosition: "", // Присваиваем пустую строку или соответствующее значение, если известно
             detailed_positions: player.detailed_positions,
@@ -90,7 +72,7 @@ exports.getSquad = async (req, res) => {
         res.json([finalSquad, transformedArray]); // Возвращаем финальный массив состава
     } catch (error) {
         console.error('Error creating squad', error);
-        res.status(500).json({ error: "An error occurred while creating the squad." });
+        res.status(500).json({ error });
     }
 };
 

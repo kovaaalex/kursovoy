@@ -19,11 +19,11 @@ function PlayerInfo({ user }) {
             }
         };
         getInjuryById();
-    }, [user.id]); // Adding user.id to dependencies
+    }, [user.id]);
 
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('en-US', options); // Указана локаль 'en-US'
+        return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
     return (

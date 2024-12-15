@@ -9,7 +9,7 @@ function Bench({ bench, onClick }) {
                     <h3>Bench</h3>
                     {ready.map(player => (
                         <p key={player.id} className={`${styles.player} ${styles.ready}`} onClick={() => onClick(player)}>
-                            {player.jersey_number} {player.fullName}
+                            {player.jersey_number} {player.name}
                         </p>
                     ))}
                 </div>

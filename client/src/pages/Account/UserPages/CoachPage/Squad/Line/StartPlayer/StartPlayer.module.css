@@ -27,3 +27,9 @@
     font-size: 12px;
     text-align: center;
 }
+.red{
+    border: 1px solid #cf122d;
+}
+.green{
+    border: 1px solid forestgreen;
+}

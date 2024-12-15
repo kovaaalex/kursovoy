@@ -29,7 +29,6 @@ function Account() {
     }
 
     const renderUserRole = () => {
-        alert(user.person_role);
 
         switch (user.person_role) {
             case 'player':

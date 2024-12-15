@@ -10,7 +10,6 @@ function PlayerPage({user, photoUrl}) {
     const [selectedTab, setSelectedTab] = useState('requestContract');
 
     const handleSidebarItemClick = (tab) => {
-        alert(user.id)
         if (tab === 'home') {
             navigate('/')
         }
